@@ -2,11 +2,9 @@ package pe.edu.upt.poo.pizzeria.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pe.edu.upt.poo.pizzeria.modelo.Cliente;
-import pe.edu.upt.poo.pizzeria.modelo.Factura;
-import pe.edu.upt.poo.pizzeria.modelo.FacturaDetalle;
-import pe.edu.upt.poo.pizzeria.modelo.ProductoTipo;
+import pe.edu.upt.poo.pizzeria.modelo.*;
 import pe.edu.upt.poo.pizzeria.repository.ClienteRepository;
+import pe.edu.upt.poo.pizzeria.repository.EmpresaRepository;
 import pe.edu.upt.poo.pizzeria.repository.FacturaRepository;
 import pe.edu.upt.poo.pizzeria.service.FacturaService;
 
@@ -18,10 +16,12 @@ public class FacturaServiceImpl  implements FacturaService {
 
     private final FacturaRepository facturaRepository;
     private final ClienteRepository clienteRepository;
+    private final EmpresaRepository empresaRepository;
 
-    public FacturaServiceImpl(FacturaRepository facturaRepository, ClienteRepository clienteRepository) {
+    public FacturaServiceImpl(FacturaRepository facturaRepository, ClienteRepository clienteRepository, EmpresaRepository empresaRepository) {
         this.facturaRepository = facturaRepository;
         this.clienteRepository = clienteRepository;
+        this.empresaRepository = empresaRepository;
     }
 
 
@@ -39,13 +39,19 @@ public class FacturaServiceImpl  implements FacturaService {
     @Override
     public Factura create(Factura entidad) {
         Long clienteId = entidad.getCliente().getId();
+        Long empresaId = entidad.getEmpresa().getId();
 
         // Recuperar el cliente desde el repositorio
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente con ID " + clienteId + " no encontrado"));
 
+        // Recuperar el cliente desde el repositorio
+        Empresa empresa = empresaRepository.findById(empresaId)
+                .orElseThrow(() -> new RuntimeException("Empresa con ID " + clienteId + " no encontrado"));
+
         // Asignar el cliente gestionado a la factura
         entidad.setCliente(cliente);
+        entidad.setEmpresa(empresa);
 
         // Configurar la relación bidireccional para los detalles de la factura
         if (entidad.getFacturaDetalleList() != null) {

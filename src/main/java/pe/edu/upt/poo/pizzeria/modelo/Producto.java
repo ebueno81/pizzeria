@@ -25,6 +25,8 @@ public class Producto {
 
     private String nombre;
 
+    private Double precio;
+
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FacturaDetalle> facturaDetalleList;
 
@@ -77,5 +79,13 @@ public class Producto {
 
     public void setFacturaDetalleList(List<FacturaDetalle> facturaDetalleList) {
         this.facturaDetalleList = facturaDetalleList;
+    }
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
     }
 }

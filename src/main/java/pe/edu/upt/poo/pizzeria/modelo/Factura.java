@@ -28,8 +28,13 @@ public class Factura {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
+    @ManyToOne
+    @JoinColumn(name = "empresa_id", nullable = false)
+    private Empresa empresa;
+
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FacturaDetalle> facturaDetalleList;
+
 
     public Long getId() {
         return id;
@@ -93,5 +98,13 @@ public class Factura {
 
     public void setFacturaDetalleList(List<FacturaDetalle> facturaDetalleList) {
         this.facturaDetalleList = facturaDetalleList;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 }
